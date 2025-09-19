@@ -4,7 +4,6 @@ using AutoMapper;
 using Cortex.Mediator.DependencyInjection;
 using FluentValidation;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection;
