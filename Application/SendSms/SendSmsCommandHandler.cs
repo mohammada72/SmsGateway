@@ -12,7 +12,7 @@ public class SendSmsCommandHandler(IApplicationDbContext dbContext) : ICommandHa
             throw new ArgumentException("Customer not found");
 
         if (customer.Account.AccountBalance < command.Recievers.Count)
-            throw new InvalidOperationException("You have insufficient account balance. Please recharge it");
+            throw new InvalidOperationException("You have insufficient account balance. Please Charge it");
 
         customer.Account.AccountBalance -= command.Recievers.Count;
         
