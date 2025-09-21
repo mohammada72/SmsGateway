@@ -1,5 +1,8 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models;
+using Infrastructure.BackgroundJobs;
 using Infrastructure.Data;
+using Infrastructure.Kafka;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +22,13 @@ public static class DependencyInjection
                 providerOptions => { providerOptions.EnableRetryOnFailure(); });
         });
 
+        builder.Services.AddPooledDbContextFactory<ApplicationDbContext>((sp, options) =>
+        {
+            options.UseSqlServer(
+                connectionString,
+                providerOptions => { providerOptions.EnableRetryOnFailure(); });
+        });
+
         builder.EnrichSqlServerDbContext<ApplicationDbContext>();
 
         builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
@@ -26,5 +36,14 @@ public static class DependencyInjection
         builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
         builder.Services.AddSingleton(TimeProvider.System);
+
+        builder.Services.AddSingleton<IKafkaMessgeProducer<long, KafkaSendSmsMessage>, KafkaSendSmsProducer>();
+
+        builder.Services.AddHostedService<SendSmsToKafka>();
+        builder.Services.AddHostedService<RecieveSmsSentResult>();
+        builder.Services.Configure<HostOptions>(hostOptions =>
+        {
+            hostOptions.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+        });
     }
 }

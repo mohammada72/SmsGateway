@@ -9,9 +9,5 @@ public class SmsConfiguration : IEntityTypeConfiguration<Sms>
     {
         builder.HasKey(x => x.Id);
         builder.Navigation(x => x.Sender);
-        
-        builder
-            .OwnsMany(x => x.SendResults);
-            
     }
 }

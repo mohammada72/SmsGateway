@@ -19,7 +19,7 @@ public readonly struct NationalId : IEquatable<NationalId>
 
         nationalId = new string(nationalId.Where(char.IsDigit).ToArray());
 
-        if (nationalId.Length != 10)
+        if (nationalId.Length != 10 && nationalId.Length != 11)
             return false;
 
         if (nationalId.Distinct().Count() == 1)

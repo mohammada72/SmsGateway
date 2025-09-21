@@ -7,6 +7,6 @@ public class SmsReportMapper : Profile
 {
     public SmsReportMapper()
     {
-         CreateMap<Sms, SmsReportQuery>();
+         CreateMap<SmsSendResult, SmsReportModel>();
     }
 }

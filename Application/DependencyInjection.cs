@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.SmsReport;
 using AutoMapper;
 using Cortex.Mediator.DependencyInjection;

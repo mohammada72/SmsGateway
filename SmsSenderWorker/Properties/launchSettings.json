@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "SmsSenderWorker": {
+      "commandName": "Project",
+      "commandLineArgs": "--servers=\"localhost:9092\" --topic-name=\"ExpressSmsSend\" \r\n--group-id=\"send-sms-group3\" --worker-name=\"worker1\" "
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

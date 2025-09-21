@@ -1,9 +1,8 @@
 ﻿namespace Application.Common.Models
 {
-    public class KafkaMessage
+    public class KafkaSendSmsMessage
     {
-        public string TopicName { get; set; } = string.Empty;
-        public long Id { get; set; }
-        public string Message { get; set; } = string.Empty;
+        public string Num { get; set; } = string.Empty;
+        public string Msg { get; set; } = string.Empty;
     }
 }

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{664E34D9-0CBA-471C-8784-04B7B85BFFB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsSenderWorker", "SmsSenderWorker\SmsSenderWorker.csproj", "{0E36F075-4C6E-4E7E-9737-048EB3BFF0B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{664E34D9-0CBA-471C-8784-04B7B85BFFB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{664E34D9-0CBA-471C-8784-04B7B85BFFB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{664E34D9-0CBA-471C-8784-04B7B85BFFB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E36F075-4C6E-4E7E-9737-048EB3BFF0B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E36F075-4C6E-4E7E-9737-048EB3BFF0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E36F075-4C6E-4E7E-9737-048EB3BFF0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E36F075-4C6E-4E7E-9737-048EB3BFF0B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
