@@ -39,7 +39,7 @@ async static Task<IResult> SendSms(SendSmsCommand command, IMediator mediator)
 {
     try
     {
-        var result = await mediator.SendCommandAsync<SendSmsCommand, int>(command);
+        var result = await mediator.SendCommandAsync<SendSmsCommand, long>(command);
         return Results.Ok($"sms sent successfully with Id: {result}");
     }
     catch (Exception ex)

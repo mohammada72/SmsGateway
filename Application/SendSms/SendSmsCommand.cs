@@ -8,4 +8,4 @@ public record SendSmsCommand
     string SmsContent,
     List<string> Recievers,
     SmsType SmsType
-    ) : ICommand<int>;
+    ) : ICommand<long>;

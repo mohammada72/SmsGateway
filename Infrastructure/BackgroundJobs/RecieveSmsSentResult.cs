@@ -1,11 +1,9 @@
 ﻿using Confluent.Kafka;
 using Domain.Enums;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Text.RegularExpressions;
 
 namespace Infrastructure.BackgroundJobs;
 
@@ -23,7 +21,7 @@ public class RecieveSmsSentResult(
                 var dbContext = await dbContextFactory.CreateDbContextAsync(stoppingToken);
                 var config = new ConsumerConfig
                 {
-                    GroupId = "send-sms-group2",
+                    GroupId = "send-sms-group",
                     BootstrapServers = "localhost:9092",
                     AutoOffsetReset = AutoOffsetReset.Earliest,
                     EnableAutoCommit = false,
@@ -53,7 +51,6 @@ public class RecieveSmsSentResult(
                 {
                     await ProcessBatch(batch);
                     CommitBatchOffsets(consumer, batch);
-                    batch.Clear();
                     await dbContext.SaveChangesAsync(CancellationToken.None);
                 }
             }
@@ -72,7 +69,37 @@ public class RecieveSmsSentResult(
         {
             smsResult.Status = bool.Parse(batch.First(x => x.Message.Key == smsResult.Id).Message.Value) ? SendStatus.Succeed : SendStatus.Failed;
         }
+        await ProcessCashBack(smsResults);
         await dbcontext.SaveChangesAsync();
+    }
+
+    private static async Task ProcessCashBack(IQueryable<Domain.Entities.SmsSendResult> smsResults)
+    {
+        var refundData = await smsResults
+                                        .Where(x => x.Status == SendStatus.Failed)
+                                        .GroupBy(x => new { SmsId = x.Sms.Id, SenderId = x.Sms.Sender.Id })
+                                        .Select(g => new
+                                        {
+                                            SmsId = g.Key.SmsId,
+                                            CustomerId = g.Key.SenderId,
+                                            FailureCount = g.Count(),
+                                            Customer = g.First().Sms.Sender
+                                        })
+                                        .ToListAsync();
+        if (refundData.Count == 0) return;
+        var customerRefunds = refundData
+                                .GroupBy(x => x.CustomerId)
+                                .Select(g => new
+                                {
+                                    Customer = g.First().Customer,
+                                    TotalRefundAmount = g.Sum(x => x.FailureCount)
+                                })
+                                .ToList();
+
+        foreach (var refund in customerRefunds)
+        {
+            refund.Customer.Account.AccountBalance += refund.TotalRefundAmount;
+        }
     }
 
     static void CommitBatchOffsets(IConsumer<long, string> consumer, List<ConsumeResult<long, string>> batch)

@@ -1,13 +1,14 @@
 ﻿using Application.Common.Interfaces;
 using Cortex.Mediator.Commands;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.SendSms;
 
-public class SendSmsCommandHandler(IApplicationDbContext dbContext) : ICommandHandler<SendSmsCommand, int>
+public class SendSmsCommandHandler(IApplicationDbContext dbContext) : ICommandHandler<SendSmsCommand, long>
 {
-    public Task<int> Handle(SendSmsCommand command, CancellationToken cancellationToken)
+    public async Task<long> Handle(SendSmsCommand command, CancellationToken cancellationToken)
     {
         var customer = dbContext
             .Customers
@@ -20,8 +21,7 @@ public class SendSmsCommandHandler(IApplicationDbContext dbContext) : ICommandHa
 
         customer.Account.AccountBalance -= command.Recievers.Count;
 
-        dbContext.Sms.Add(
-            new()
+        var newSms = new Sms()
             {
                 MessageBody = command.SmsContent,
                 Priority = command.SmsType switch
@@ -37,8 +37,10 @@ public class SendSmsCommandHandler(IApplicationDbContext dbContext) : ICommandHa
                 }).ToList(),
                 Sender = customer,
                 CreatedDate = DateTime.UtcNow,
-            });
-
-        return dbContext.SaveChangesAsync(cancellationToken);
+            };
+        dbContext.Sms.Add(newSms);
+            
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return newSms.Id;
     }
 }

@@ -11,9 +11,9 @@ public class SmsReportQueryHandler(IApplicationDbContext dbContext, IMapper mapp
 {
     public Task<PaginatedList<SmsReportModel>> Handle(SmsReportQuery query, CancellationToken cancellationToken)
     {
-        var result = dbContext.SmsSendResult
+        var result = dbContext.Sms.Include(x=> x.SendResults)
             .AsNoTrackingWithIdentityResolution()
-            .Where(x => x.Sms.Id == query.SmsId)
+            .Where(x => x.Id == query.SmsId)
             .ProjectTo<SmsReportModel>(mapper.ConfigurationProvider);
 
         return PaginatedList<SmsReportModel>.CreateAsync(result, query.PageNumber, query.PageSize, cancellationToken);

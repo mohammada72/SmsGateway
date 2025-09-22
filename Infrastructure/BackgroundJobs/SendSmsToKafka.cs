@@ -31,7 +31,7 @@ public class SendSmsToKafka(
 
                 if (messages.Count == 0)
                 {
-                    await Task.Delay(100, stoppingToken);
+                    await Task.Delay(500, stoppingToken);
                     continue;
                 }
 
