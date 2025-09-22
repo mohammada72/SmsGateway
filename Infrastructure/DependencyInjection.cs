@@ -33,8 +33,6 @@ public static class DependencyInjection
 
         builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-        builder.Services.AddScoped<ApplicationDbContextInitialiser>();
-
         builder.Services.AddSingleton(TimeProvider.System);
 
         builder.Services.AddSingleton<IKafkaMessgeProducer<long, KafkaSendSmsMessage>, KafkaSendSmsProducer>();

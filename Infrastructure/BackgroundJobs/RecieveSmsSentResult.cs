@@ -2,6 +2,7 @@
 using Domain.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -9,7 +10,8 @@ namespace Infrastructure.BackgroundJobs;
 
 public class RecieveSmsSentResult(
     IDbContextFactory<ApplicationDbContext> dbContextFactory,
-    ILogger<RecieveSmsSentResult> logger) : BackgroundService
+    ILogger<RecieveSmsSentResult> logger,
+    IConfiguration configuration) : BackgroundService
 {
     protected async override Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -22,7 +24,7 @@ public class RecieveSmsSentResult(
                 var config = new ConsumerConfig
                 {
                     GroupId = "send-sms-group",
-                    BootstrapServers = "localhost:9092",
+                    BootstrapServers = configuration.GetValue<string>("KafkaServers") ?? "localhost:9092",
                     AutoOffsetReset = AutoOffsetReset.Earliest,
                     EnableAutoCommit = false,
                     EnableAutoOffsetStore = false,
