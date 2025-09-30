@@ -1,16 +1,36 @@
-# SmsGateway
+# SMS Gateway (sms sending application)
 
-This is a sample application for sending sms efficiently and high performant. 
+This is a high-performance sample application designed for efficiently sending SMS messages.
 
+## Solution Overview
 
-These are two executable project in solution:
-1. WebApi project that handle requests from user.
-2. Console app project that is a simple worker working only kafak to send sms and push result of them to kafka
+The solution contains two executable projects:
 
-You need kafa broker and sql server to run it. If you already worked on asp.net project you know how can configure those configuration in appsettings.json file for webApi and commandline argument for console app.
+- **Web API project**  
+  Handles incoming user requests.
 
-You can build them with .net cli or msbuild and also exists docker files in solution. so you can create images and run container. .Net aspire approach will be ready soon. 
-Some things need to be improved :
-1- There is no unit tests yet
-2- exception handling is awful
-3- logging and monitoring must be added.
+- **Console Worker project**  
+  A simple background worker that processes SMS sending using Kafka and pushes results back to Kafka.
+
+## Prerequisites
+
+- Kafka broker
+- SQL Server instance
+
+If you have prior experience with ASP.NET projects, configuring the connection strings and other settings will be straightforward:
+
+- For the **Web API**, configuration is done via the `appsettings.json` file.
+- For the **Console Worker**, configurations are passed via command-line arguments.
+
+## Building and Running
+
+- You can build the projects using the `.NET CLI` or `MSBuild`.
+- Dockerfiles are included for both projects, allowing you to create Docker images and run containers.
+- A .NET Aspire-based approach will be available soon.
+
+## Current Limitations & Improvements Needed
+
+1. No unit tests have been implemented yet.
+2. Exception handling requires significant improvement.
+3. Logging and monitoring are not yet integrated and must be added.
+
